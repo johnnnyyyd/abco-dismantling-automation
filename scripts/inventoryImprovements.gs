@@ -1,53 +1,106 @@
+/**
+ * Applies dashboard formulas, validation rules, and supporting sheets for the
+ * master equipment inventory.
+ */
 function setupInventoryEnhancements() {
   const ss = SpreadsheetApp.getActive();
 
   // Dashboard formulas
   const dashboard = ss.getSheetByName('Dashboard');
   if (dashboard) {
-    // Equipment by Location
-    dashboard.getRange('B4').setFormula("=COUNTIF('Equipment Data'!B:B,'Building 4')");
-    dashboard.getRange('B5').setFormula("=COUNTIF('Equipment Data'!B:B,'Store 1')");
-    dashboard.getRange('B6').setFormula("=COUNTIF('Equipment Data'!B:B,'Store 3')");
-    dashboard.getRange('B7').setFormula("=COUNTIF('Equipment Data'!B:B,'Store 5')");
-    dashboard.getRange('B8').setFormula("=COUNTIF('Equipment Data'!B:B,'Yard')");
-    dashboard.getRange('B9').setFormula("=COUNTIF('Equipment Data'!B:B,'Central Warehouse')");
-    dashboard.getRange('B10').setFormula("=COUNTIF('Equipment Data'!B:B,'Warehouse')");
-    dashboard.getRange('B11').setFormula("=COUNTIF('Equipment Data'!B:B,'Store 2')");
-    dashboard.getRange('B12').setFormula("=COUNTIF('Equipment Data'!B:B,'Unknown Location')");
+    const locationCounts = {
+      B4: 'Building 4',
+      B5: 'Store 1',
+      B6: 'Store 3',
+      B7: 'Store 5',
+      B8: 'Yard',
+      B9: 'Central Warehouse',
+      B10: 'Warehouse',
+      B11: 'Store 2',
+      B12: 'Unknown Location'
+    };
 
-    // Equipment by Type
-    dashboard.getRange('D4').setFormula("=COUNTIF('Equipment Data'!C:C,'Vehicle Hoist')");
-    dashboard.getRange('D5').setFormula("=COUNTIF('Equipment Data'!C:C,'Engine Crane')");
-    dashboard.getRange('D6').setFormula("=COUNTIF('Equipment Data'!C:C,'Air Compressor')");
-    dashboard.getRange('D7').setFormula("=COUNTIF('Equipment Data'!C:C,'Bendi')");
-    dashboard.getRange('D8').setFormula("=COUNTIF('Equipment Data'!C:C,'Gas Forklift')");
-    dashboard.getRange('D9').setFormula("=COUNTIF('Equipment Data'!C:C,'Order Picker')");
-    dashboard.getRange('D10').setFormula("=COUNTIF('Equipment Data'!C:C,'Cat Cutter')");
-    dashboard.getRange('D11').setFormula("=COUNTIF('Equipment Data'!C:C,'Electric Forklift')");
-    dashboard.getRange('D12').setFormula("=COUNTIF('Equipment Data'!C:C,'Screw Compressor')");
-    dashboard.getRange('D13').setFormula("=COUNTIF('Equipment Data'!C:C,'Loader')");
-    dashboard.getRange('D14').setFormula("=COUNTIF('Equipment Data'!C:C,'Tire Machine')");
-    dashboard.getRange('D15').setFormula("=COUNTIF('Equipment Data'!C:C,'Car Crusher')");
-    dashboard.getRange('D16').setFormula("=COUNTIF('Equipment Data'!C:C,'Scissor Lift')");
+    const typeCounts = {
+      D4: 'Vehicle Hoist',
+      D5: 'Engine Crane',
+      D6: 'Air Compressor',
+      D7: 'Bendi',
+      D8: 'Gas Forklift',
+      D9: 'Order Picker',
+      D10: 'Cat Cutter',
+      D11: 'Electric Forklift',
+      D12: 'Screw Compressor',
+      D13: 'Loader',
+      D14: 'Tire Machine',
+      D15: 'Car Crusher',
+      D16: 'Scissor Lift'
+    };
 
-    // Equipment by Status
-    dashboard.getRange('F4').setFormula("=COUNTIF('Equipment Data'!J:J,'Active')");
-    dashboard.getRange('F5').setFormula("=COUNTIF('Equipment Data'!J:J,'Needs Repair')");
-    dashboard.getRange('F6').setFormula("=COUNTIF('Equipment Data'!J:J,'Broken/Cant Use')");
-    dashboard.getRange('F7').setFormula("=COUNTIF('Equipment Data'!J:J,'Retired')");
-    dashboard.getRange('F8').setFormula("=COUNTIF('Equipment Data'!J:J,'Storage')");
+    const statusCounts = {
+      F4: 'Active',
+      F5: 'Needs Repair',
+      F6: 'Broken/Cant Use',
+      F7: 'Retired',
+      F8: 'Storage'
+    };
 
-    // Key Metrics
-    dashboard.getRange('B21').setFormula("=COUNTA('Equipment Data'!A:A)-1");
-    dashboard.getRange('D21').setFormula("=COUNTIF('Equipment Data'!J:J,'Active')");
-    dashboard.getRange('F21').setFormula("=SUM(F5:F6)");
-    dashboard.getRange('B22').setFormula("=COUNTIF('Equipment Data'!I:I,'<>')");
-    dashboard.getRange('D22').setFormula("=COUNTA(UNIQUE('Equipment Data'!B:B))-1");
-    dashboard.getRange('F22').setFormula("=COUNTA(UNIQUE('Equipment Data'!C:C))-1");
-    dashboard.getRange('B23').setFormula("=COUNTIF('Equipment Data'!N:N,'<>')");
+    Object.entries(locationCounts).forEach(([cell, location]) => {
+      dashboard.getRange(cell)
+        .setFormula(`=COUNTIF('Equipment Data'!B:B,"${location}")`);
+    });
 
-    // QR count
-    dashboard.getRange('D23').setFormula("=COUNTIF('Equipment Data'!P:P,'<>')");
+    Object.entries(typeCounts).forEach(([cell, type]) => {
+      dashboard.getRange(cell)
+        .setFormula(`=COUNTIF('Equipment Data'!C:C,"${type}")`);
+    });
+
+    Object.entries(statusCounts).forEach(([cell, status]) => {
+      dashboard.getRange(cell)
+        .setFormula(`=COUNTIF('Equipment Data'!J:J,"${status}")`);
+    });
+
+    const metrics = {
+      B21: "=COUNTA('Equipment Data'!A:A)-1",
+      D21: "=COUNTIF('Equipment Data'!J:J,'Active')",
+      F21: "=SUM(F5:F6)",
+      B22: "=COUNTIF('Equipment Data'!I:I,'<>')",
+      D22: "=COUNTA(UNIQUE('Equipment Data'!B:B))-1",
+      F22: "=COUNTA(UNIQUE('Equipment Data'!C:C))-1",
+      B23: "=COUNTIF('Equipment Data'!N:N,'<>')",
+      D23: "=COUNTIF('Equipment Data'!P:P,'<>')"
+    };
+
+    Object.entries(metrics).forEach(([cell, formula]) => {
+      dashboard.getRange(cell).setFormula(formula);
+    });
+
+    // Conditional formatting
+    const rules = dashboard.getConditionalFormatRules();
+    const cfRanges = [
+      { range: 'F5', color: '#f44336' }, // red
+      { range: 'F6', color: '#f44336' }, // red
+      { range: 'F8', color: '#fff176' }, // yellow
+      { range: 'B12', color: '#fff176' } // yellow
+    ];
+    cfRanges.forEach(({ range, color }) => {
+      rules.push(
+        SpreadsheetApp.newConditionalFormatRule()
+          .whenNumberGreaterThan(0)
+          .setBackground(color)
+          .setRanges([dashboard.getRange(range)])
+          .build()
+      );
+    });
+    dashboard.setConditionalFormatRules(rules);
+
+    // Font and alignment settings
+    dashboard.getRange('1:1').setFontFamily('Arial').setFontSize(12)
+      .setFontWeight('bold').setHorizontalAlignment('center');
+    dashboard.getRange('3:3').setFontFamily('Arial').setFontSize(12)
+      .setFontWeight('bold').setHorizontalAlignment('center');
+    const dataRange = dashboard.getRange('A4:Z');
+    dataRange.setFontFamily('Arial').setFontSize(10)
+      .setHorizontalAlignment('left');
   }
 
   // Data validation rules
