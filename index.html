@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abco Digital Library</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">Abco Digital Library</div>
+      <nav>
+        <a href="#collections">Collections</a>
+        <a href="#featured">Featured</a>
+        <a href="#about">About</a>
+        <a href="#support">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <h1>Explore Manuals, Guides, and Training Resources</h1>
+        <p>
+          A curated digital library supporting dismantling operations at Abco Fridley Auto Parts.
+          Access interactive manuals, safety guides, and training modules designed for technicians,
+          supervisors, and new team members.
+        </p>
+        <div class="search-panel">
+          <label class="sr-only" for="library-search">Search the library</label>
+          <input id="library-search" type="search" placeholder="Search by title, topic, or keyword" autocomplete="off">
+          <button id="search-button" type="button">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections" class="collections">
+      <div class="container">
+        <h2>Collections</h2>
+        <div class="collection-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="featured" class="featured">
+      <div class="container">
+        <h2>Featured Resources</h2>
+        <div class="featured-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="container">
+        <h2>About This Library</h2>
+        <p>
+          The Abco Digital Library centralizes our dismantling knowledge into a single, searchable hub.
+          Each resource includes quick-glance metadata, download options, and related links so you can
+          get to the right information faster.
+        </p>
+        <ul>
+          <li>Technical manuals and teardown workflows for common vehicle families.</li>
+          <li>Interactive safety briefings and compliance documentation.</li>
+          <li>Training tracks for new hires and advanced certifications.</li>
+          <li>Data exports and reporting dashboards for supervisors.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="support" class="support">
+      <div class="container">
+        <h2>Need Support?</h2>
+        <p>Email <a href="mailto:library@abcofridley.com">library@abcofridley.com</a> or chat with our knowledge team.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; <span id="year"></span> Abco Fridley Auto Parts. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <template id="collection-card-template">
+    <article class="collection-card">
+      <div class="card-header">
+        <div class="card-icon" aria-hidden="true">📚</div>
+        <div>
+          <h3 class="card-title"></h3>
+          <p class="card-count"></p>
+        </div>
+      </div>
+      <p class="card-description"></p>
+      <div class="card-tags" role="list"></div>
+    </article>
+  </template>
+
+  <template id="featured-card-template">
+    <article class="featured-card">
+      <div class="featured-header">
+        <h3 class="featured-title"></h3>
+        <span class="featured-type"></span>
+      </div>
+      <p class="featured-description"></p>
+      <ul class="featured-meta"></ul>
+      <a class="featured-link" target="_blank" rel="noopener"></a>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
