@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABCO Production Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #DC143C;
+            --primary-dark: #a00d2c;
+            --primary-light: #ff4d6d;
+            --dark: #0f1419;
+            --dark-secondary: #1a202c;
+            --light: #f7f9fc;
+            --light-secondary: #e8ecf1;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --gray: #6b7280;
+            --gray-light: #d1d5db;
+            --gray-lighter: #f3f4f6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f1f5f9 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 100%);
+            color: white;
+            padding: 1.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-xl);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .header-left {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-subtitle {
+            font-size: 0.7rem;
+            color: var(--primary-light);
+            margin-top: 0.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-center {
+            flex: 1;
+            text-align: center;
+            margin: 0 2rem;
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
+        }
+
+        .header-role {
+            font-size: 0.8rem;
+            color: var(--primary-light);
+            background: rgba(220, 20, 60, 0.15);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            margin-top: 0.5rem;
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .time-display {
+            text-align: right;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .time-display small {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--primary-light);
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        .role-selector {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid rgba(220, 20, 60, 0.3);
+            transition: var(--transition);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .role-selector:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(220, 20, 60, 0.2);
+        }
+
+        .role-selector:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            background: white;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            gap: 0;
+            padding: 0;
+            overflow-x: auto;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-btn {
+            padding: 1.1rem 1.8rem;
+            border: none;
+            background: white;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(220, 20, 60, 0.05);
+            font-weight: 700;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== GRID ===== */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-1 { grid-template-columns: 1fr; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--gray-lighter);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            gap: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            letter-spacing: -0.3px;
+        }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+        }
+
+        .status-empty {
+            background: var(--gray-lighter);
+            color: var(--gray);
+            border-color: var(--gray-light);
+        }
+
+        .status-working {
+            background: var(--success-light);
+            color: #065f46;
+            border-color: var(--success);
+        }
+
+        .status-complete {
+            background: var(--success-light);
+            color: #065f46;
+            border-color: var(--success);
+        }
+
+        .status-waiting {
+            background: var(--warning-light);
+            color: #78350f;
+            border-color: var(--warning);
+        }
+
+        /* ===== KPI CARDS ===== */
+        .kpi-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: linear-gradient(135deg, white 0%, var(--light) 100%);
+            position: relative;
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.05), transparent);
+            border-radius: 50%;
+        }
+
+        .kpi-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kpi-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 700;
+        }
+
+        /* ===== BAY CARDS ===== */
+        .bay-card {
+            cursor: pointer;
+            padding: 2rem;
+            background: linear-gradient(135deg, white 0%, var(--light) 100%);
+            border-left: 4px solid var(--gray-light);
+            position: relative;
+        }
+
+        .bay-card.status-working {
+            border-left-color: var(--success);
+            background: linear-gradient(135deg, white 0%, rgba(16, 185, 129, 0.03) 100%);
+        }
+
+        .bay-card.status-complete {
+            border-left-color: var(--success);
+        }
+
+        .bay-card.status-waiting {
+            border-left-color: var(--warning);
+            background: linear-gradient(135deg, white 0%, rgba(245, 158, 11, 0.03) 100%);
+        }
+
+        .bay-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.8rem;
+        }
+
+        .bay-info {
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .bay-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--gray-lighter);
+            align-items: center;
+        }
+
+        .bay-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .bay-info-label {
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bay-info-value {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .bay-actions {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 0.8rem 1.4rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-lighter);
+            color: var(--gray);
+            border: 1px solid var(--gray-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-secondary);
+            color: var(--dark);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 0.6rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-group-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--gray-lighter);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: white;
+            color: var(--dark);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(220, 20, 60, 0.1);
+            background: white;
+        }
+
+        /* ===== DISMANTLER VIEW ===== */
+        .dismantler-main {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .dismantler-bay-number {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+
+        .dismantler-status-box {
+            font-size: 3rem;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin: 2.5rem 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dismantler-status-empty {
+            background: linear-gradient(135deg, var(--gray-lighter), var(--light-secondary));
+            color: var(--gray);
+        }
+
+        .dismantler-status-working {
+            background: linear-gradient(135deg, var(--success-light), rgba(16, 185, 129, 0.2));
+            color: #065f46;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .dismantler-status-complete {
+            background: linear-gradient(135deg, var(--success-light), rgba(16, 185, 129, 0.2));
+            color: #065f46;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .dismantler-status-waiting {
+            background: linear-gradient(135deg, var(--warning-light), rgba(245, 158, 11, 0.2));
+            color: #78350f;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+        }
+
+        .dismantler-info {
+            background: linear-gradient(135deg, white, var(--light));
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-lighter);
+        }
+
+        .dismantler-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-lighter);
+            font-size: 1.1rem;
+        }
+
+        .dismantler-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .dismantler-info-label {
+            color: var(--gray);
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dismantler-info-value {
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.3rem;
+        }
+
+        .dismantler-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 3rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .dismantler-actions .btn {
+            padding: 1.4rem;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ===== LOADER VIEW ===== */
+        .swap-request {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--warning);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--gray-lighter);
+        }
+
+        .swap-request:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .swap-request.in-progress {
+            border-left-color: var(--info);
+            background: linear-gradient(135deg, white, rgba(59, 130, 246, 0.02));
+        }
+
+        .swap-request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .swap-request-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.3px;
+        }
+
+        .swap-request-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--gray-lighter);
+            border-bottom: 1px solid var(--gray-lighter);
+        }
+
+        .swap-info-item {
+            text-align: center;
+        }
+
+        .swap-info-label {
+            color: var(--gray);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .swap-info-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 0.5rem;
+        }
+
+        .swap-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        /* ===== TV VIEW ===== */
+        .tv-display {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .tv-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 4px 20px rgba(220, 20, 60, 0.3);
+        }
+
+        .tv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1800px;
+        }
+
+        .tv-bay-card {
+            background: linear-gradient(135deg, var(--dark-secondary), rgba(255, 255, 255, 0.05));
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(220, 20, 60, 0.15);
+            transition: var(--transition);
+        }
+
+        .tv-bay-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 12px 40px rgba(220, 20, 60, 0.25);
+            transform: translateY(-4px);
+        }
+
+        .tv-bay-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .tv-status {
+            font-size: 2.5rem;
+            padding: 1.8rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tv-status-empty {
+            background: rgba(107, 114, 128, 0.2);
+            color: #d1d5db;
+            border: 2px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .tv-status-working {
+            background: rgba(16, 185, 129, 0.2);
+            color: #d1fae5;
+            border: 2px solid var(--success);
+        }
+
+        .tv-status-complete {
+            background: rgba(16, 185, 129, 0.2);
+            color: #d1fae5;
+            border: 2px solid var(--success);
+        }
+
+        .tv-status-waiting {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fef3c7;
+            border: 2px solid var(--warning);
+        }
+
+        .tv-tech {
+            font-size: 1.4rem;
+            color: #cbd5e1;
+            margin-top: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1.2rem;
+                padding: 1.5rem;
+            }
+
+            .header-title {
+                font-size: 1.4rem;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .grid {
+                gap: 1rem;
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-value {
+                font-size: 2.5rem;
+            }
+
+            .dismantler-bay-number {
+                font-size: 3.5rem;
+            }
+
+            .dismantler-status-box {
+                font-size: 2rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .dismantler-actions .btn {
+                padding: 1.2rem;
+                font-size: 1.1rem;
+            }
+
+            .tv-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tv-bay-number {
+                font-size: 2.2rem;
+            }
+
+            .tv-status {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+            }
+
+            .nav-btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .kpi-value {
+                font-size: 2rem;
+            }
+
+            .btn {
+                padding: 0.7rem 1.1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== UTILITIES ===== */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--gray); }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            letter-spacing: -0.3px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-lighter), transparent);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-left">
+            <div>
+                <div class="logo">ABCO</div>
+                <div class="logo-subtitle">PRODUCTION</div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="header-title">PRODUCTION COMMAND CENTER</div>
+            <div class="header-role" id="headerRole">Manager View</div>
+        </div>
+        <div class="header-right">
+            <div class="time-display">
+                <div id="currentTime">00:00</div>
+                <small id="currentDate">Fri, Dec 19</small>
+            </div>
+            <select class="role-selector" id="roleSelector" onchange="switchRole(this.value)">
+                <option value="manager">👨‍💼 Manager</option>
+                <option value="dismantler">🔧 Dismantler</option>
+                <option value="loader">🚜 Loader Driver</option>
+                <option value="tv">📺 TV Display</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- MANAGER VIEW NAV -->
+    <nav id="managerNav">
+        <button class="nav-btn active" onclick="switchManagerTab('overview', event)">📊 Overview</button>
+        <button class="nav-btn" onclick="switchManagerTab('bays', event)">🏭 All Bays</button>
+        <button class="nav-btn" onclick="switchManagerTab('timeline', event)">📈 Timeline</button>
+        <button class="nav-btn" onclick="switchManagerTab('settings', event)">⚙️ Settings</button>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <!-- ===== MANAGER VIEW ===== -->
+        <section id="managerView" class="section active">
+            
+            <!-- OVERVIEW TAB -->
+            <div id="managerOverview" class="tab-content active">
+                <h2 class="section-title">Daily Production Overview</h2>
+
+                <div class="grid grid-4">
+                    <div class="card kpi-card">
+                        <div class="kpi-value" id="mgrCompleted">0</div>
+                        <div class="kpi-label">Completed</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-value" id="mgrActive">1</div>
+                        <div class="kpi-label">Working</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-value" id="mgrWaiting">2</div>
+                        <div class="kpi-label">Waiting</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-value" id="mgrUtilization">0%</div>
+                        <div class="kpi-label">Utilization</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title" style="margin-top: 3rem;">Store 1 Dismantling (5 Bays)</h3>
+                <div class="grid grid-3" id="mgrStore1Bays"></div>
+
+                <h3 class="section-title" style="margin-top: 3rem;">Building 4 Dismantling (8 Bays)</h3>
+                <div class="grid grid-3" id="mgrBuilding4Bays"></div>
+            </div>
+
+            <!-- BAYS TAB -->
+            <div id="managerBays" class="tab-content" style="display: none;">
+                <h2 class="section-title">All Bays Management</h2>
+                <div style="margin-bottom: 2rem;">
+                    <input type="text" id="searchBay" placeholder="Search by bay, technician, or stock number..." style="max-width: 400px;">
+                </div>
+                <div id="allBaysGrid" class="grid grid-2"></div>
+            </div>
+
+            <!-- TIMELINE TAB -->
+            <div id="managerTimeline" class="tab-content" style="display: none;">
+                <h2 class="section-title">Production Timeline</h2>
+                <div id="timelineContent"></div>
+            </div>
+
+            <!-- SETTINGS TAB -->
+            <div id="managerSettings" class="tab-content" style="display: none;">
+                <h2 class="section-title">Settings & Configuration</h2>
+                <div class="card">
+                    <h3 class="card-title">Daily Production Targets</h3>
+                    <div class="form-group">
+                        <label>Total Daily Target</label>
+                        <input type="number" id="targetTotal" value="13">
+                    </div>
+                    <div class="form-group">
+                        <label>Store 1 Target</label>
+                        <input type="number" id="targetStore1" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Building 4 Target</label>
+                        <input type="number" id="targetBuilding4" value="8">
+                    </div>
+                    <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== DISMANTLER VIEW ===== -->
+        <section id="dismantlerView" class="section">
+            <div class="dismantler-main">
+                <div class="card" style="max-width: 600px; margin: 0 auto;">
+                    <div class="dismantler-bay-number" id="dismantlerBayNum">BAY 1</div>
+                    <div class="dismantler-status-box dismantler-status-empty" id="dismantlerStatus">EMPTY</div>
+
+                    <div class="dismantler-info">
+                        <div class="dismantler-info-row">
+                            <span class="dismantler-info-label">Technician:</span>
+                            <span class="dismantler-info-value" id="dismantlerTech">Not Assigned</span>
+                        </div>
+                        <div class="dismantler-info-row">
+                            <span class="dismantler-info-label">Stock Number:</span>
+                            <span class="dismantler-info-value" id="dismantlerStock">STK-000</span>
+                        </div>
+                        <div class="dismantler-info-row">
+                            <span class="dismantler-info-label">Time Working:</span>
+                            <span class="dismantler-info-value" id="dismantlerTime">0:00</span>
+                        </div>
+                        <div class="dismantler-info-row">
+                            <span class="dismantler-info-label">Progress:</span>
+                            <span class="dismantler-info-value" id="dismantlerProgress">0/1</span>
+                        </div>
+                    </div>
+
+                    <div class="dismantler-actions">
+                        <button class="btn btn-success" onclick="startWork()" style="padding: 1.5rem; font-size: 1.3rem;">
+                            ▶️ START WORK
+                        </button>
+                        <button class="btn btn-primary" onclick="completeVehicle()" style="padding: 1.5rem; font-size: 1.3rem;">
+                            ✓ COMPLETE VEHICLE
+                        </button>
+                        <button class="btn btn-warning" onclick="requestSwap()" style="padding: 1.5rem; font-size: 1.3rem;">
+                            ⏳ REQUEST SWAP
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button class="btn btn-secondary" onclick="selectDismantlerBay()">🔀 Change Bay</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== LOADER DRIVER VIEW ===== -->
+        <section id="loaderView" class="section">
+            <h1 class="section-title">🚜 Loader Driver - Swap Management</h1>
+
+            <div class="grid grid-4">
+                <div class="card kpi-card">
+                    <div class="kpi-value" id="loaderPending">0</div>
+                    <div class="kpi-label">Pending</div>
+                </div>
+                <div class="card kpi-card">
+                    <div class="kpi-value" id="loaderInProgress">0</div>
+                    <div class="kpi-label">In Progress</div>
+                </div>
+                <div class="card kpi-card">
+                    <div class="kpi-value" id="loaderCompleted">0</div>
+                    <div class="kpi-label">Completed</div>
+                </div>
+                <div class="card kpi-card">
+                    <div class="kpi-value" id="loaderTotal">0</div>
+                    <div class="kpi-label">Total Today</div>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 3rem;">Pending Swaps</h2>
+            <div id="loaderPendingContainer"></div>
+
+            <h2 class="section-title" style="margin-top: 3rem;">In Progress</h2>
+            <div id="loaderInProgressContainer"></div>
+
+            <h2 class="section-title" style="margin-top: 3rem;">Completed</h2>
+            <div id="loaderCompletedContainer"></div>
+        </section>
+
+        <!-- ===== TV DISPLAY VIEW ===== -->
+        <section id="tvView" class="section">
+            <div class="tv-display">
+                <div class="tv-title">⚡ PRODUCTION STATUS ⚡</div>
+                <div class="tv-grid" id="tvBayGrid"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // ===== DATA STRUCTURE =====
+        const productionData = {
+            bays: {
+                store1: [
+                    { bayId: 1, location: 'Store 1', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 2, location: 'Store 1', status: 'complete', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 3, location: 'Store 1', status: 'complete', technician: '', stock: '', completed: 1, target: 1, startTime: null, timeline: [] },
+                    { bayId: 4, location: 'Store 1', status: 'working', technician: 'John', stock: 'STK-2024-001', completed: 0, target: 1, startTime: new Date(Date.now() - 600000), timeline: [] },
+                    { bayId: 5, location: 'Store 1', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] }
+                ],
+                building4: [
+                    { bayId: 6, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 7, location: 'Building 4', status: 'working', technician: 'Mike', stock: 'STK-2024-002', completed: 0, target: 1, startTime: new Date(Date.now() - 1200000), timeline: [] },
+                    { bayId: 8, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 9, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 10, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 11, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 12, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] },
+                    { bayId: 13, location: 'Building 4', status: 'empty', technician: '', stock: '', completed: 0, target: 1, startTime: null, timeline: [] }
+                ]
+            },
+            swaps: [],
+            settings: {
+                targetTotal: 13,
+                targetStore1: 5,
+                targetBuilding4: 8
+            }
+        };
+
+        let currentRole = 'manager';
+        let currentDismantlerBay = 1;
+
+        // ===== TIME UPDATE =====
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // ===== ROLE SWITCHING =====
+        function switchRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('managerNav').style.display = role === 'manager' ? 'flex' : 'none';
+
+            const roleTexts = {
+                'manager': '👨‍💼 Manager View - Full Oversight',
+                'dismantler': '🔧 Dismantler View - Your Bay',
+                'loader': '🚜 Loader Driver - Swap Management',
+                'tv': '📺 TV Display - Live Feed'
+            };
+
+            document.getElementById('headerRole').textContent = roleTexts[role];
+
+            switch (role) {
+                case 'manager':
+                    document.getElementById('managerView').classList.add('active');
+                    updateManagerDashboard();
+                    break;
+                case 'dismantler':
+                    document.getElementById('dismantlerView').classList.add('active');
+                    updateDismantlerView();
+                    break;
+                case 'loader':
+                    document.getElementById('loaderView').classList.add('active');
+                    updateLoaderView();
+                    break;
+                case 'tv':
+                    document.getElementById('tvView').classList.add('active');
+                    updateTVDisplay();
+                    break;
+            }
+        }
+
+        // ===== MANAGER DASHBOARD =====
+        function updateManagerDashboard() {
+            const stats = calculateStats();
+            document.getElementById('mgrCompleted').textContent = stats.completed;
+            document.getElementById('mgrActive').textContent = stats.active;
+            document.getElementById('mgrWaiting').textContent = stats.waiting;
+            document.getElementById('mgrUtilization').textContent = stats.utilization + '%';
+
+            renderManagerBays('store1', 'mgrStore1Bays');
+            renderManagerBays('building4', 'mgrBuilding4Bays');
+        }
+
+        function renderManagerBays(location, containerId) {
+            const bays = productionData.bays[location];
+            const container = document.getElementById(containerId);
+            container.innerHTML = bays.map(bay => `
+                <div class="card bay-card status-${bay.status}">
+                    <div class="bay-number">BAY ${bay.bayId}</div>
+                    <span class="status-badge status-${bay.status}">${bay.status.toUpperCase()}</span>
+                    <div class="bay-info">
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Technician:</span>
+                            <span class="bay-info-value">${bay.technician || 'Unassigned'}</span>
+                        </div>
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Stock:</span>
+                            <span class="bay-info-value">${bay.stock || '—'}</span>
+                        </div>
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Progress:</span>
+                            <span class="bay-info-value">${bay.completed}/${bay.target}</span>
+                        </div>
+                        ${bay.startTime ? `
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Time:</span>
+                            <span class="bay-info-value">${getElapsedTime(bay.startTime)}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div class="bay-actions">
+                        <button class="btn btn-primary btn-small" onclick="editBay(event, ${bay.bayId})">✏️ Edit</button>
+                        <button class="btn btn-warning btn-small" onclick="assignTechnician(event, ${bay.bayId})">👤 Assign</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editBay(e, bayId) {
+            e.stopPropagation();
+            const newTech = prompt('Enter technician name:');
+            if (newTech) {
+                const bay = getAllBays().find(b => b.bayId === bayId);
+                bay.technician = newTech;
+                bay.timeline.push({ time: new Date(), action: `Assigned to ${newTech}` });
+                updateManagerDashboard();
+            }
+        }
+
+        function assignTechnician(e, bayId) {
+            e.stopPropagation();
+            const tech = prompt('Technician name:');
+            if (tech) {
+                const bay = getAllBays().find(b => b.bayId === bayId);
+                bay.technician = tech;
+                bay.status = 'working';
+                bay.startTime = new Date();
+                bay.timeline.push({ time: new Date(), action: `${tech} started` });
+                updateManagerDashboard();
+            }
+        }
+
+        function switchManagerTab(tab, event) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById('managerOverview').style.display = tab === 'overview' ? 'block' : 'none';
+            document.getElementById('managerBays').style.display = tab === 'bays' ? 'block' : 'none';
+            document.getElementById('managerTimeline').style.display = tab === 'timeline' ? 'block' : 'none';
+            document.getElementById('managerSettings').style.display = tab === 'settings' ? 'block' : 'none';
+
+            document.querySelectorAll('#managerNav .nav-btn').forEach(b => b.classList.remove('active'));
+            if (event?.target) {
+                event.target.classList.add('active');
+            }
+
+            if (tab === 'timeline') {
+                renderTimeline();
+            } else if (tab === 'bays') {
+                renderAllBays();
+            }
+        }
+
+        function renderAllBays() {
+            const bays = getAllBays();
+            const search = document.getElementById('searchBay').value.toLowerCase();
+            const filtered = bays.filter(bay => 
+                bay.bayId.toString().includes(search) ||
+                bay.technician.toLowerCase().includes(search) ||
+                bay.stock.toLowerCase().includes(search)
+            );
+
+            const container = document.getElementById('allBaysGrid');
+            container.innerHTML = filtered.map(bay => `
+                <div class="card bay-card status-${bay.status}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div class="bay-number" style="margin: 0; font-size: 2.2rem;">BAY ${bay.bayId}</div>
+                        <span class="status-badge status-${bay.status}">${bay.status.toUpperCase()}</span>
+                    </div>
+                    <div class="bay-info">
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Location:</span>
+                            <span class="bay-info-value">${bay.location}</span>
+                        </div>
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Technician:</span>
+                            <span class="bay-info-value">${bay.technician || '—'}</span>
+                        </div>
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Stock:</span>
+                            <span class="bay-info-value">${bay.stock || '—'}</span>
+                        </div>
+                        <div class="bay-info-row">
+                            <span class="bay-info-label">Progress:</span>
+                            <span class="bay-info-value">${bay.completed}/${bay.target}</span>
+                        </div>
+                    </div>
+                    <div class="bay-actions">
+                        <button class="btn btn-primary btn-small" onclick="editBayDetails(${bay.bayId})">✏️ Edit</button>
+                        <button class="btn btn-success btn-small" onclick="markComplete(${bay.bayId})">✓ Complete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editBayDetails(bayId) {
+            const bay = getAllBays().find(b => b.bayId === bayId);
+            const newTech = prompt(`Edit technician for Bay ${bayId}:`, bay.technician);
+            if (newTech !== null) {
+                bay.technician = newTech;
+                renderAllBays();
+            }
+        }
+
+        function markComplete(bayId) {
+            const bay = getAllBays().find(b => b.bayId === bayId);
+            bay.status = 'complete';
+            bay.startTime = null;
+            bay.timeline.push({ time: new Date(), action: 'Marked complete' });
+            updateManagerDashboard();
+            renderAllBays();
+        }
+
+        function renderTimeline() {
+            const allEvents = [];
+            getAllBays().forEach(bay => {
+                bay.timeline.forEach(event => {
+                    allEvents.push({ ...event, bay: bay.bayId });
+                });
+            });
+            allEvents.sort((a, b) => b.time - a.time);
+
+            const container = document.getElementById('timelineContent');
+            if (allEvents.length === 0) {
+                container.innerHTML = '<div class="card" style="text-align: center; padding: 3rem; color: var(--gray);">No timeline events yet</div>';
+            } else {
+                container.innerHTML = allEvents.map((event, i) => `
+                    <div class="card" style="margin-bottom: 1rem; border-left: 4px solid var(--primary); padding: 1.5rem;">
+                        <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">${event.time.toLocaleTimeString()}</div>
+                        <div style="color: var(--dark);">📍 Bay ${event.bay}: <strong>${event.action}</strong></div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function saveSettings() {
+            productionData.settings.targetTotal = parseInt(document.getElementById('targetTotal').value);
+            productionData.settings.targetStore1 = parseInt(document.getElementById('targetStore1').value);
+            productionData.settings.targetBuilding4 = parseInt(document.getElementById('targetBuilding4').value);
+            alert('✓ Settings saved successfully!');
+            updateManagerDashboard();
+        }
+
+        // ===== DISMANTLER DASHBOARD =====
+        function updateDismantlerView() {
+            const bay = getAllBays().find(b => b.bayId === currentDismantlerBay);
+            if (!bay) return;
+
+            document.getElementById('dismantlerBayNum').textContent = `BAY ${bay.bayId}`;
+            document.getElementById('dismantlerStatus').className = `dismantler-status-box dismantler-status-${bay.status}`;
+            document.getElementById('dismantlerStatus').textContent = bay.status.toUpperCase();
+            document.getElementById('dismantlerTech').textContent = bay.technician || 'Not Assigned';
+            document.getElementById('dismantlerStock').textContent = bay.stock || 'STK-000';
+            document.getElementById('dismantlerProgress').textContent = `${bay.completed}/${bay.target}`;
+            
+            if (bay.startTime) {
+                document.getElementById('dismantlerTime').textContent = getElapsedTime(bay.startTime);
+                setInterval(() => {
+                    document.getElementById('dismantlerTime').textContent = getElapsedTime(bay.startTime);
+                }, 1000);
+            }
+        }
+
+        function startWork() {
+            const bay = getAllBays().find(b => b.bayId === currentDismantlerBay);
+            const tech = prompt('Enter your name:');
+            if (tech) {
+                bay.status = 'working';
+                bay.technician = tech;
+                bay.startTime = new Date();
+                bay.stock = prompt('Enter stock number:', 'STK-2024-001') || 'STK-2024-001';
+                bay.timeline.push({ time: new Date(), action: `${tech} started working on ${bay.stock}` });
+                updateDismantlerView();
+            }
+        }
+
+        function completeVehicle() {
+            const bay = getAllBays().find(b => b.bayId === currentDismantlerBay);
+            if (bay.status !== 'working') {
+                alert('⚠️ Bay is not currently being worked on!');
+                return;
+            }
+            bay.completed += 1;
+            bay.timeline.push({ time: new Date(), action: `Vehicle completed by ${bay.technician}` });
+            alert(`✓ Vehicle completed! Progress: ${bay.completed}/${bay.target}`);
+            updateDismantlerView();
+        }
+
+        function requestSwap() {
+            const bay = getAllBays().find(b => b.bayId === currentDismantlerBay);
+            if (bay.status !== 'working') {
+                alert('⚠️ Must complete vehicle first!');
+                return;
+            }
+            bay.status = 'waiting';
+            const swap = {
+                id: productionData.swaps.length + 1,
+                bayId: bay.bayId,
+                location: bay.location,
+                technician: bay.technician,
+                lastStock: bay.stock,
+                requestTime: new Date(),
+                status: 'pending'
+            };
+            productionData.swaps.push(swap);
+            bay.timeline.push({ time: new Date(), action: 'Swap requested' });
+            alert('✓ Swap request sent to loader driver!');
+            updateDismantlerView();
+        }
+
+        function selectDismantlerBay() {
+            const bayNum = prompt('Select bay (1-13):', currentDismantlerBay);
+            if (bayNum && bayNum >= 1 && bayNum <= 13) {
+                currentDismantlerBay = parseInt(bayNum);
+                updateDismantlerView();
+            }
+        }
+
+        // ===== LOADER DRIVER VIEW =====
+        function updateLoaderView() {
+            const pending = productionData.swaps.filter(s => s.status === 'pending').length;
+            const inProgress = productionData.swaps.filter(s => s.status === 'in-progress').length;
+            const completed = productionData.swaps.filter(s => s.status === 'completed').length;
+
+            document.getElementById('loaderPending').textContent = pending;
+            document.getElementById('loaderInProgress').textContent = inProgress;
+            document.getElementById('loaderCompleted').textContent = completed;
+            document.getElementById('loaderTotal').textContent = productionData.swaps.length;
+
+            renderSwapsByStatus();
+        }
+
+        function renderSwapsByStatus() {
+            const pending = productionData.swaps.filter(s => s.status === 'pending');
+            const inProgress = productionData.swaps.filter(s => s.status === 'in-progress');
+            const completed = productionData.swaps.filter(s => s.status === 'completed');
+
+            document.getElementById('loaderPendingContainer').innerHTML = pending.length ? pending.map(swap => `
+                <div class="swap-request">
+                    <div class="swap-request-header">
+                        <div class="swap-request-title">BAY ${swap.bayId} - ${swap.location}</div>
+                        <span class="status-badge status-waiting">PENDING</span>
+                    </div>
+                    <div class="swap-request-info">
+                        <div class="swap-info-item">
+                            <div class="swap-info-label">Technician</div>
+                            <div class="swap-info-value">${swap.technician}</div>
+                        </div>
+                        <div class="swap-info-item">
+                            <div class="swap-info-label">Last Stock</div>
+                            <div class="swap-info-value">${swap.lastStock}</div>
+                        </div>
+                        <div class="swap-info-item">
+                            <div class="swap-info-label">Requested</div>
+                            <div class="swap-info-value">${swap.requestTime.toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                    <div class="swap-actions">
+                        <button class="btn btn-primary" onclick="startSwap(${swap.id})">▶️ Start Swap</button>
+                        <button class="btn btn-secondary" onclick="skipSwap(${swap.id})">⏭️ Skip</button>
+                    </div>
+                </div>
+            `).join('') : '<div class="card" style="text-align: center; padding: 2rem; color: var(--gray);">No pending swaps</div>';
+
+            document.getElementById('loaderInProgressContainer').innerHTML = inProgress.length ? inProgress.map(swap => `
+                <div class="swap-request in-progress">
+                    <div class="swap-request-header">
+                        <div class="swap-request-title">BAY ${swap.bayId} - ${swap.location}</div>
+                        <span class="status-badge status-working">IN PROGRESS</span>
+                    </div>
+                    <div class="swap-actions">
+                        <button class="btn btn-success" onclick="completeSwap(${swap.id})">✓ Complete Swap</button>
+                        <button class="btn btn-secondary" onclick="cancelSwap(${swap.id})">❌ Cancel</button>
+                    </div>
+                </div>
+            `).join('') : '<div class="card" style="text-align: center; padding: 2rem; color: var(--gray);">No swaps in progress</div>';
+
+            document.getElementById('loaderCompletedContainer').innerHTML = completed.length ? completed.map(swap => `
+                <div class="swap-request" style="opacity: 0.7;">
+                    <div class="swap-request-header">
+                        <div class="swap-request-title">BAY ${swap.bayId} - ${swap.location}</div>
+                        <span class="status-badge status-complete">COMPLETED</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--gray); margin-top: 0.5rem;">
+                        ✓ Completed at ${swap.completedTime ? swap.completedTime.toLocaleTimeString() : 'N/A'}
+                    </div>
+                </div>
+            `).join('') : '<div class="card" style="text-align: center; padding: 2rem; color: var(--gray);">No completed swaps yet</div>';
+        }
+
+        function startSwap(swapId) {
+            const swap = productionData.swaps.find(s => s.id === swapId);
+            swap.status = 'in-progress';
+            updateLoaderView();
+            alert(`✓ Swap for Bay ${swap.bayId} started!`);
+        }
+
+        function completeSwap(swapId) {
+            const swap = productionData.swaps.find(s => s.id === swapId);
+            swap.status = 'completed';
+            swap.completedTime = new Date();
+            const bay = getAllBays().find(b => b.bayId === swap.bayId);
+            bay.status = 'empty';
+            bay.technician = '';
+            bay.stock = '';
+            bay.startTime = null;
+            bay.timeline.push({ time: new Date(), action: 'Bay swapped and cleared' });
+            updateLoaderView();
+            alert(`✓ Swap for Bay ${swap.bayId} completed!`);
+        }
+
+        function skipSwap(swapId) {
+            const swap = productionData.swaps.find(s => s.id === swapId);
+            swap.skipped = true;
+            updateLoaderView();
+        }
+
+        function cancelSwap(swapId) {
+            const swap = productionData.swaps.find(s => s.id === swapId);
+            swap.status = 'pending';
+            updateLoaderView();
+        }
+
+        // ===== TV DISPLAY =====
+        function updateTVDisplay(bayFilter) {
+            const bays = getAllBays();
+            const filtered = bayFilter ? bays.filter(b => b.bayId === parseInt(bayFilter)) : bays;
+
+            const container = document.getElementById('tvBayGrid');
+            container.innerHTML = filtered.map(bay => `
+                <div class="tv-bay-card">
+                    <div class="tv-bay-number">BAY ${bay.bayId}</div>
+                    <div class="tv-status tv-status-${bay.status}">${bay.status.toUpperCase()}</div>
+                    <div class="tv-tech">${bay.technician || 'Unassigned'}</div>
+                    <div style="margin-top: 1.2rem; font-size: 1.2rem; color: #cbd5e1; font-weight: 600;">
+                        ${bay.stock || '—'} | ${bay.completed}/${bay.target}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function getAllBays() {
+            return [...productionData.bays.store1, ...productionData.bays.building4];
+        }
+
+        function calculateStats() {
+            const bays = getAllBays();
+            const completed = bays.filter(b => b.status === 'complete').length;
+            const active = bays.filter(b => b.status === 'working').length;
+            const waiting = bays.filter(b => b.status === 'waiting').length;
+            const utilization = bays.length > 0 ? Math.round((active / bays.length) * 100) : 0;
+
+            return { completed, active, waiting, utilization };
+        }
+
+        function getElapsedTime(startTime) {
+            const now = new Date();
+            const diff = Math.floor((now - startTime) / 1000);
+            const hours = Math.floor(diff / 3600);
+            const mins = Math.floor((diff % 3600) / 60);
+            const secs = diff % 60;
+            return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // ===== INITIALIZATION =====
+        updateManagerDashboard();
+    </script>
+</body>
+</html>
